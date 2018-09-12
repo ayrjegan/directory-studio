@@ -1,0 +1,371 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<section id="tools_search_dialog">
+	<title>Search dialog</title>
+	<para>
+		In the LDAP Search page you can specify search parameters to query a directory.
+		It is integrated within the Eclipse search dialog.
+	</para>
+	<para>
+		To start the LDAP Search page the following procedure is recommended:
+		<orderedlist numeration="arabic">
+
+			<listitem>
+				<para>
+					Select a entry, search, attribute or value in the LDAP Browser
+					view, in the Entry editor or in the Search Result editor.
+				</para>
+			</listitem>
+		
+		
+			<listitem>
+				<para>
+					Then choose
+					<emphasis role="strong">
+						<inlinemediaobject>
+							<imageobject>
+								<imagedata scale="50"
+									fileref="icons/search_new.gif" format="GIF" />
+							</imageobject>
+						</inlinemediaobject>
+						New Search...
+					</emphasis>
+					from context menu or use the shortcut
+					<shortcut>
+						<keycombo>
+							<keycap>Ctrl</keycap>
+							<keycap>H</keycap>
+						</keycombo>
+					</shortcut>
+					or press the 
+					<emphasis role="strong">
+						<inlinemediaobject>
+							<imageobject>
+								<imagedata scale="50"
+									fileref="icons/search.gif" format="GIF" />
+							</imageobject>
+						</inlinemediaobject>
+						Search
+					</emphasis>
+					button in the Workbench toolbar.
+				</para>
+			</listitem>		
+		</orderedlist>
+	</para>
+	
+	<para>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata scale="50"
+						fileref="images/tools_search_dialog_1.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+	</para>
+	
+	<para>
+		<informaltable frame="all">
+			<tgroup cols="3">
+				<colspec colname="Option" colwidth="1*" />
+				<colspec colname="Description" colwidth="3*" />
+				<colspec colname="Default" colwidth="1*" />
+				<thead>
+					<row>
+						<entry>Option</entry>
+						<entry>Description</entry>
+						<entry>Default</entry>
+					</row>
+				</thead>
+				<tbody>
+				
+					<row>
+						<entry>Search Name</entry>
+						<entry>
+							A meaningful name of the search. With this name
+							the search is listed in the Searches category.
+						</entry>
+						<entry>
+							Current timestamp
+						</entry>
+					</row>
+					<row>
+						<entry>Connection</entry>
+						<entry>
+							The connection to search on. Use the
+							<emphasis role="strong">
+								Browse...
+							</emphasis>
+							button to select a connection.
+						</entry>
+						<entry>
+							<superscript>*</superscript>)
+						</entry>
+					</row>	
+					<row>
+						<entry>Search Base</entry>
+						<entry>
+							The base DN of the search. 
+							You could edit the DN or select a
+							recently used DN from drop-down list or
+							click to
+							<emphasis role="strong">
+								Browse....
+							</emphasis>
+							to open the DN Selector dialog.
+						</entry>
+						<entry>
+							<superscript>*</superscript>)
+						</entry>
+					</row>								
+					<row>
+						<entry>Filter</entry>
+						<entry>
+							Enter a valid LDAP search filter. The drop-down list
+							provides a history of recently used	filters. A click to the
+							<emphasis role="strong">
+								Filter Editor
+							</emphasis>
+							button opens the 
+							<link linkend="tools_filter_editor_dialog">Filter Editor dialog</link>
+							, it also explains how the content assistance works.
+						</entry>
+						<entry>
+							<superscript>*</superscript>)
+						</entry>
+					</row>
+					<row>
+						<entry>Returning Attributes</entry>
+						<entry>
+							A comma-separated list of attributes
+							that should be returned and displayed in
+							the Search Result editor. Hit 
+							<shortcut><keycombo><keycap>Strg</keycap><keycap>Space</keycap></keycombo></shortcut>
+							to get content assistance. The drop-down
+							list provides a history of recently used
+							attributes.
+						</entry>
+						<entry>
+							<superscript>*</superscript>
+							)
+						</entry>
+					</row>
+					
+					<row>
+						<entry>ManageDsaIT</entry>
+						<entry>
+							If checked the ManageDsaIT control is sent to the server.
+						</entry>
+						<entry>
+							unchecked
+						</entry>
+					</row>
+					<row>
+						<entry>Subentries</entry>
+						<entry>
+							If checked the Subentries control
+							(RFC 3672) is sent to the server.
+						</entry>
+						<entry>
+							unchecked
+						</entry>
+					</row>
+					<row>
+						<entry>Paged Search</entry>
+						<entry>
+							If checked the simple paged result control
+							is sent to the server.
+							With the page size you could define how many entries 
+							should be retrieved	in one request.
+							If Scroll Mode is enabled only one page is fetched
+							from the server at once, you could 
+							'scroll' through the pages by using the 'next page' 
+							and 'top page' items. If disabled 
+							<emphasis role="strong">all</emphasis>
+							entries are fetched from the server, the paged 
+							result control is only used in background to 
+							avoid server-side limits.
+						</entry>
+						<entry>
+							unchecked
+						</entry>
+					</row>
+					
+					<row>
+						<entry>Scope</entry>
+						<entry>
+							The search scope. 
+							<emphasis role="strong">Object</emphasis> 
+							searches on the	base DN only (compare); 
+							<emphasis role="strong">One Level</emphasis>
+							searches the direct children of the base DN;
+							<emphasis role="strong">Subtree</emphasis>
+							searches the base DN an all its	descendants.
+						</entry>
+						<entry>
+							<superscript>*</superscript>
+							)
+						</entry>
+					</row>
+					<row>
+						<entry>Count Limit</entry>
+						<entry>
+							The maximum number of entries the server 
+							should return, value 0 means no limit. 
+							Note that this
+							value is a client-side limit, its
+							possible that also a server-side limit
+							is used.
+						</entry>
+						<entry>
+							<superscript>*</superscript>
+							)
+						</entry>
+					</row>
+					<row>
+						<entry>Time Limit</entry>
+						<entry>
+							The maximum time in seconds the
+							server should search. Value 0
+							means no limit. Note that this value is
+							a client-side value, its possible that
+							also a server-side limit is used.
+						</entry>
+						<entry>
+							<superscript>*</superscript>
+							)
+						</entry>
+					</row>
+					<row>
+						<entry>Alias Dereferencing</entry>
+						<entry>
+							Specifies whether aliases should be
+							dereferenced while finding the search base
+							entry or when performing the search or
+							both.
+							To manage (create, modify, delete) aliases
+							you have to uncheck both options. 
+						</entry>
+						<entry>
+							<superscript>*</superscript>
+							)
+						</entry>
+					</row>
+					<row>
+						<entry>Referrals Handling</entry>
+						<entry>
+							Specifies the referral handling. 
+							<itemizedlist spacing="normal" mark="bullet">
+									<listitem>Follow Referrals manually:
+									Received referrals and search continuations are just displayed 
+									As soon as you open or expand such an search 
+									continuation the search is continued. You are asked which connection 
+									you want to use to follow a specific referral URL, this way you have 
+									full control regarding encryption and authentication options when 
+									following referrals.</listitem>
+									<listitem>Follow Referrals automatically: 
+									Follows referrals and search continuations immediately if they are 
+									received from the directory server. You are asked which connection 
+									you want to use to follow a specific referral URL, this way you 
+									have full control regarding encryption and authentication options 
+									when following referrals.</listitem>
+									<listitem>Ignore Referrals:
+									Any referral or search continuation received from the directory server 
+									is silently ignored. No error is logged, no dialog appears, no special 
+									entry is displayed, no ManageDsaIT control is sent to the 
+									server.</listitem>
+								</itemizedlist>
+						</entry>
+						<entry>
+							<superscript>*</superscript>
+							)
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+		<superscript>*</superscript> )
+		The default values depends on the element that was
+		selected when the wizard has been started:
+		<itemizedlist>
+			<listitem>
+				<para>
+					Search: All search parameters are taken from the selected search
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Entry, search result or bookmark:
+					<itemizedlist>
+						<listitem>
+							<para>Connection: the connection behind the entry</para>
+						</listitem>
+						<listitem>
+							<para>Search Base: the entry's DN</para>
+						</listitem>
+						<listitem>
+							<para>Filter: (objectClass=*)</para>
+						</listitem>
+						<listitem>
+							<para>Returning Attributes: -</para>
+						</listitem>
+						<listitem>
+							<para>Scope: One Level</para>
+						</listitem>
+						<listitem>
+							<para>Limits, aliases and referral handling are taken 
+								from the entry's connection</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Attribte and/or values:
+					<itemizedlist>
+						<listitem>
+							<para>Connection: the connection behind attribute's entry</para>
+						</listitem>
+						<listitem>
+							<para>Search Base: the DN of the attribute's entry</para>
+						</listitem>
+						<listitem>
+							<para>Filter: The filter is build from the selected attributes 
+								and values (Query by example)</para>
+						</listitem>
+						<listitem>
+							<para>Returning Attributes: -</para>
+						</listitem>
+						<listitem>
+							<para>Scope: One Level</para>
+						</listitem>
+						<listitem>
+							<para>Limits, aliases and referral handling are taken 
+								from connection behind attribute's entry</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+			</listitem>
+		</itemizedlist>
+	</para>	
+	
+
+
+
+</section>	

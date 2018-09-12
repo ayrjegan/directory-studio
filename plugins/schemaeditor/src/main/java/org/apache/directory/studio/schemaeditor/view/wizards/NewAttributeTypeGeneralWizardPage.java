@@ -1,0 +1,468 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *  
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License. 
+ *  
+ */
+package org.apache.directory.studio.schemaeditor.view.wizards;
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.directory.api.asn1.util.Oid;
+import org.apache.directory.studio.schemaeditor.Activator;
+import org.apache.directory.studio.schemaeditor.PluginConstants;
+import org.apache.directory.studio.schemaeditor.PluginUtils;
+import org.apache.directory.studio.schemaeditor.controller.SchemaHandler;
+import org.apache.directory.studio.schemaeditor.model.Schema;
+import org.apache.directory.studio.schemaeditor.model.alias.Alias;
+import org.apache.directory.studio.schemaeditor.model.alias.AliasWithPartError;
+import org.apache.directory.studio.schemaeditor.model.alias.AliasWithStartError;
+import org.apache.directory.studio.schemaeditor.model.alias.AliasesStringParser;
+import org.apache.directory.studio.schemaeditor.view.dialogs.EditAttributeTypeAliasesDialog;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
+
+/**
+ * This class represents the General WizardPage of the NewAttributeTypeWizard.
+ * <p>
+ * It is used to let the user enter general information about the
+ * attribute type he wants to create (schema, OID, aliases an description).
+ *
+ * @author <a href="mailto:dev@directory.apache.org">Apache Directory Project</a>
+ */
+public class NewAttributeTypeGeneralWizardPage extends AbstractWizardPage
+{
+    /** The SchemaHandler */
+    private SchemaHandler schemaHandler;
+
+    /** The aliases */
+    private List<Alias> aliases;
+
+    /** The selected schema */
+    private Schema selectedSchema;
+
+    // UI fields
+    private ComboViewer schemaComboViewer;
+    private Combo oidCombo;
+    private Text aliasesText;
+    private Button aliasesButton;
+    private Text descriptionText;
+
+
+    /**
+     * Creates a new instance of NewAttributeTypeGeneralWizardPage.
+     */
+    protected NewAttributeTypeGeneralWizardPage()
+    {
+        super( "NewAttributeTypeGeneralWizardPage" ); //$NON-NLS-1$
+        setTitle( Messages.getString( "NewAttributeTypeGeneralWizardPage.AttributeType" ) ); //$NON-NLS-1$
+        setDescription( Messages.getString( "NewAttributeTypeGeneralWizardPage.CreateNewAttributeType" ) ); //$NON-NLS-1$
+        setImageDescriptor( Activator.getDefault().getImageDescriptor( PluginConstants.IMG_ATTRIBUTE_TYPE_NEW_WIZARD ) );
+
+        schemaHandler = Activator.getDefault().getSchemaHandler();
+        aliases = new ArrayList<Alias>();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void createControl( Composite parent )
+    {
+        Composite composite = new Composite( parent, SWT.NULL );
+        GridLayout layout = new GridLayout();
+        composite.setLayout( layout );
+
+        // Schema Group
+        Group schemaGroup = new Group( composite, SWT.NONE );
+        schemaGroup.setText( Messages.getString( "NewAttributeTypeGeneralWizardPage.Schema" ) ); //$NON-NLS-1$
+        schemaGroup.setLayout( new GridLayout( 2, false ) );
+        schemaGroup.setLayoutData( new GridData( SWT.FILL, SWT.NONE, true, false ) );
+
+        // Schema
+        Label schemaLabel = new Label( schemaGroup, SWT.NONE );
+        schemaLabel.setText( Messages.getString( "NewAttributeTypeGeneralWizardPage.SchemaColon" ) ); //$NON-NLS-1$
+        Combo schemaCombo = new Combo( schemaGroup, SWT.READ_ONLY );
+        schemaCombo.setLayoutData( new GridData( SWT.FILL, SWT.NONE, true, false ) );
+        schemaComboViewer = new ComboViewer( schemaCombo );
+        schemaComboViewer.setContentProvider( new ArrayContentProvider() );
+        schemaComboViewer.setLabelProvider( new LabelProvider()
+        {
+            /**
+             * {@inheritDoc}
+             */
+            public String getText( Object element )
+            {
+                if ( element instanceof Schema )
+                {
+                    return ( ( Schema ) element ).getSchemaName();
+                }
+
+                // Default
+                return super.getText( element );
+            }
+        } );
+        schemaComboViewer.addSelectionChangedListener( new ISelectionChangedListener()
+        {
+            /**
+             * {@inheritDoc}
+             */
+            public void selectionChanged( SelectionChangedEvent event )
+            {
+                dialogChanged();
+            }
+        } );
+
+        // Naming and Description Group
+        Group namingDescriptionGroup = new Group( composite, SWT.NONE );
+        namingDescriptionGroup.setText( Messages.getString( "NewAttributeTypeGeneralWizardPage.NamingAndDescription" ) ); //$NON-NLS-1$
+        namingDescriptionGroup.setLayout( new GridLayout( 3, false ) );
+        namingDescriptionGroup.setLayoutData( new GridData( SWT.FILL, SWT.NONE, true, false ) );
+
+        // OID
+        Label oidLabel = new Label( namingDescriptionGroup, SWT.NONE );
+        oidLabel.setText( Messages.getString( "NewAttributeTypeGeneralWizardPage.OID" ) ); //$NON-NLS-1$
+        oidCombo = new Combo( namingDescriptionGroup, SWT.DROP_DOWN | SWT.BORDER );
+        oidCombo.setLayoutData( new GridData( SWT.FILL, SWT.NONE, true, false, 2, 1 ) );
+        oidCombo.addModifyListener( new ModifyListener()
+        {
+            /**
+             * {@inheritDoc}
+             */
+            public void modifyText( ModifyEvent arg0 )
+            {
+                dialogChanged();
+            }
+        } );
+        oidCombo.addVerifyListener( new VerifyListener()
+        {
+            /**
+             * {@inheritDoc}
+             */
+            public void verifyText( VerifyEvent e )
+            {
+                if ( !e.text.matches( "([0-9]*\\.?)*" ) ) //$NON-NLS-1$
+                {
+                    e.doit = false;
+                }
+            }
+        } );
+        oidCombo.setItems( PluginUtils.loadDialogSettingsHistory( PluginConstants.DIALOG_SETTINGS_OID_HISTORY ) );
+
+        // Aliases
+        Label aliasesLabel = new Label( namingDescriptionGroup, SWT.NONE );
+        aliasesLabel.setText( Messages.getString( "NewAttributeTypeGeneralWizardPage.Aliases" ) ); //$NON-NLS-1$
+        aliasesText = new Text( namingDescriptionGroup, SWT.BORDER );
+        aliasesText.setLayoutData( new GridData( SWT.FILL, SWT.NONE, true, false ) );
+        aliasesText.addModifyListener( new ModifyListener()
+        {
+            public void modifyText( ModifyEvent e )
+            {
+                AliasesStringParser parser = new AliasesStringParser();
+                parser.parse( aliasesText.getText() );
+                List<Alias> parsedAliases = parser.getAliases();
+                aliases.clear();
+                for ( Alias parsedAlias : parsedAliases )
+                {
+                    aliases.add( parsedAlias );
+                }
+
+                dialogChanged();
+            }
+        } );
+        aliasesButton = new Button( namingDescriptionGroup, SWT.PUSH );
+        aliasesButton.setText( Messages.getString( "NewAttributeTypeGeneralWizardPage.Edit" ) ); //$NON-NLS-1$
+        aliasesButton.addSelectionListener( new SelectionAdapter()
+        {
+            /**
+             * {@inheritDoc}
+             */
+            public void widgetSelected( SelectionEvent arg0 )
+            {
+                EditAttributeTypeAliasesDialog dialog = new EditAttributeTypeAliasesDialog( getAliasesValue() );
+
+                if ( dialog.open() == EditAttributeTypeAliasesDialog.OK )
+                {
+                    String[] newAliases = dialog.getAliases();
+
+                    StringBuffer sb = new StringBuffer();
+                    for ( String newAlias : newAliases )
+                    {
+                        sb.append( newAlias );
+                        sb.append( ", " ); //$NON-NLS-1$
+                    }
+                    sb.deleteCharAt( sb.length() - 1 );
+                    sb.deleteCharAt( sb.length() - 1 );
+
+                    AliasesStringParser parser = new AliasesStringParser();
+                    parser.parse( sb.toString() );
+                    List<Alias> parsedAliases = parser.getAliases();
+                    aliases.clear();
+                    for ( Alias parsedAlias : parsedAliases )
+                    {
+                        aliases.add( parsedAlias );
+                    }
+
+                    fillInAliasesLabel();
+                    dialogChanged();
+                }
+            }
+        } );
+
+        // Description
+        Label descriptionLabel = new Label( namingDescriptionGroup, SWT.NONE );
+        descriptionLabel.setText( Messages.getString( "NewAttributeTypeGeneralWizardPage.Description" ) ); //$NON-NLS-1$
+        descriptionText = new Text( namingDescriptionGroup, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL );
+        GridData descriptionGridData = new GridData( SWT.FILL, SWT.NONE, true, false, 2, 1 );
+        descriptionGridData.heightHint = 67;
+        descriptionText.setLayoutData( descriptionGridData );
+        descriptionText.addModifyListener( new ModifyListener()
+        {
+            /**
+             * {@inheritDoc}
+             */
+            public void modifyText( ModifyEvent arg0 )
+            {
+                dialogChanged();
+            }
+        } );
+
+        initFields();
+
+        setControl( composite );
+    }
+
+
+    /**
+     * Initializes the UI fields.
+     */
+    private void initFields()
+    {
+        if ( schemaHandler == null )
+        {
+            schemaComboViewer.getCombo().setEnabled( false );
+            oidCombo.setEnabled( false );
+            aliasesText.setEnabled( false );
+            aliasesButton.setEnabled( false );
+            descriptionText.setEnabled( false );
+
+            displayErrorMessage( Messages.getString( "NewAttributeTypeGeneralWizardPage.ErrorNoSchemaProjectOpen" ) ); //$NON-NLS-1$
+        }
+        else
+        {
+            // Filling the Schemas table
+            List<Schema> schemas = new ArrayList<Schema>();
+            schemas.addAll( schemaHandler.getSchemas() );
+
+            Collections.sort( schemas, new Comparator<Schema>()
+            {
+                public int compare( Schema o1, Schema o2 )
+                {
+                    return o1.getSchemaName().compareToIgnoreCase( o2.getSchemaName() );
+                }
+            } );
+
+            schemaComboViewer.setInput( schemas );
+
+            if ( selectedSchema != null )
+            {
+                schemaComboViewer.setSelection( new StructuredSelection( selectedSchema ) );
+            }
+
+            displayErrorMessage( null );
+        }
+
+        setPageComplete( false );
+    }
+
+
+    /**
+     * This method is called when the user modifies something in the UI.
+     */
+    private void dialogChanged()
+    {
+        if ( schemaComboViewer.getSelection().isEmpty() )
+        {
+            displayErrorMessage( Messages.getString( "NewAttributeTypeGeneralWizardPage.ErrorNoSchemaSpecified" ) ); //$NON-NLS-1$
+            return;
+        }
+        if ( oidCombo.getText().equals( "" ) ) //$NON-NLS-1$
+        {
+            displayErrorMessage( Messages.getString( "NewAttributeTypeGeneralWizardPage.ErrorNoOIDSpecified" ) ); //$NON-NLS-1$
+            return;
+        }
+        if ( ( !oidCombo.getText().equals( "" ) ) && ( !Oid.isOid( oidCombo.getText() ) ) ) //$NON-NLS-1$
+        {
+            displayErrorMessage( Messages.getString( "NewAttributeTypeGeneralWizardPage.ErrorIncorrectOID" ) ); //$NON-NLS-1$
+            return;
+        }
+        if ( ( !oidCombo.getText().equals( "" ) ) && ( Oid.isOid( oidCombo.getText() ) ) //$NON-NLS-1$
+            && ( schemaHandler.isOidAlreadyTaken( oidCombo.getText() ) ) )
+        {
+            displayErrorMessage( Messages.getString( "NewAttributeTypeGeneralWizardPage.ErrorObjectOIDExists" ) ); //$NON-NLS-1$
+            return;
+        }
+        if ( aliases.size() == 0 )
+        {
+            displayWarningMessage( Messages.getString( "NewAttributeTypeGeneralWizardPage.ErrorAttributeTypeNoName" ) ); //$NON-NLS-1$
+            return;
+        }
+        else
+        {
+            for ( Alias alias : aliases )
+            {
+                if ( alias instanceof AliasWithStartError )
+                {
+                    displayErrorMessage( NLS
+                        .bind(
+                            Messages.getString( "NewAttributeTypeGeneralWizardPage.AliasStartInvalid" ), new Object[] { alias, ( ( AliasWithStartError ) alias ).getErrorChar() } ) ); //$NON-NLS-1$
+                    return;
+                }
+                else if ( alias instanceof AliasWithPartError )
+                {
+                    displayErrorMessage( NLS
+                        .bind(
+                            Messages.getString( "NewAttributeTypeGeneralWizardPage.AliasPartInvalid" ), new Object[] { alias, ( ( AliasWithPartError ) alias ).getErrorChar() } ) ); //$NON-NLS-1$
+                    return;
+                }
+            }
+        }
+
+        displayErrorMessage( null );
+    }
+
+
+    /**
+     * Fills in the Aliases Label.
+     */
+    private void fillInAliasesLabel()
+    {
+        StringBuffer sb = new StringBuffer();
+
+        for ( Alias alias : aliases )
+        {
+            sb.append( alias );
+            sb.append( ", " ); //$NON-NLS-1$
+        }
+
+        sb.deleteCharAt( sb.length() - 1 );
+        sb.deleteCharAt( sb.length() - 1 );
+
+        aliasesText.setText( sb.toString() );
+    }
+
+
+    /**
+     * Get the name of the schema.
+     *
+     * @return
+     *      the name of the schema
+     */
+    public String getSchemaValue()
+    {
+        StructuredSelection selection = ( StructuredSelection ) schemaComboViewer.getSelection();
+        if ( !selection.isEmpty() )
+        {
+            Schema schema = ( Schema ) selection.getFirstElement();
+
+            return schema.getSchemaName();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    /**
+     * Gets the value of the OID.
+     *
+     * @return
+     *      the value of the OID
+     */
+    public String getOidValue()
+    {
+        return oidCombo.getText();
+    }
+
+
+    /**
+     * Gets the value of the aliases.
+     *
+     * @return
+     *      the value of the aliases
+     */
+    public List<String> getAliasesValue()
+    {
+        List<String> aliasesValue = new ArrayList<String>();
+
+        for ( Alias alias : aliases )
+        {
+            aliasesValue.add( alias.toString() );
+        }
+
+        return aliasesValue;
+    }
+
+
+    /**
+     * Gets the value of the description.
+     *
+     * @return
+     *      the value of the description
+     */
+    public String getDescriptionValue()
+    {
+        return descriptionText.getText();
+    }
+
+
+    /**
+     * Sets the selected schema.
+     *
+     * @param schema
+     *      the selected schema
+     */
+    public void setSelectedSchema( Schema schema )
+    {
+        selectedSchema = schema;
+    }
+}

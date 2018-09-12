@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"?>
+<rdf:RDF xml:lang="en"
+         xmlns="http://usefulinc.com/ns/doap#" 
+         xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+         xmlns:asfext="http://projects.apache.org/ns/asfext#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/">
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+   
+         http://www.apache.org/licenses/LICENSE-2.0
+   
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+  <Project rdf:about="http://directory.apache.org/studio/">
+    <created>2007-05-04</created>
+    <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
+    <name>Apache Directory Studio</name>
+    <homepage rdf:resource="http://directory.apache.org/studio/" />
+    <asfext:pmc rdf:resource="http://directory.apache.org" />
+    <shortdesc>The Eclipse based LDAP browser and directory client</shortdesc>
+    <description>Apache Directory Studio is a complete directory tooling platform intended to be used with any LDAP server however it is particularly designed for use with ApacheDS. It is an Eclipse RCP application, composed of several Eclipse (OSGi) plugins, that can be easily upgraded with additional ones. These plugins can even run within Eclipse itself.</description>
+    <bug-database rdf:resource="http://issues.apache.org/jira/browse/DIRSTUDIO" />
+    <mailing-list rdf:resource="http://directory.apache.org/community%26resources/mailing-lists-and-irc.html" />
+    <download-page rdf:resource="http://directory.apache.org/studio/downloads.html" />
+    <programming-language>Java</programming-language>
+    <category rdf:resource="http://projects.apache.org/category/network-client" />
+    <release>
+      <Version>
+        <name>Latest stable 1.x release</name>
+        <created>2010-04-05</created>
+        <revision>1.5.3 (1.5.3.v20100330)</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>Latest 2.x milestone release</name>
+        <created>2012-02-29</created>
+        <revision>2.0 M3 (2.0.0.v20120224)</revision>
+      </Version>
+    </release>
+    <repository>
+      <SVNRepository>
+        <location rdf:resource="http://svn.apache.org/repos/asf/directory/studio/"/>
+        <browse rdf:resource="http://svn.apache.org/viewvc/directory/studio/"/>
+      </SVNRepository>
+    </repository>
+    <maintainer>
+      <foaf:Person>
+        <foaf:name>Pierre-Arnaud Marcelot</foaf:name>
+          <foaf:mbox rdf:resource="mailto:pamarcelot@apache.org"/>
+      </foaf:Person>
+    </maintainer>
+    <asfext:implements><asfext:Standard>
+      <asfext:title>Lightweight Directory Access Protocol (LDAP): The Protocol</asfext:title>
+      <asfext:body>IETF</asfext:body>
+      <asfext:id>RFC 4511</asfext:id>
+      <asfext:url rdf:resource="http://www.ietf.org/rfc/rfc4511.txt"/>
+    </asfext:Standard></asfext:implements>
+  </Project>
+</rdf:RDF>

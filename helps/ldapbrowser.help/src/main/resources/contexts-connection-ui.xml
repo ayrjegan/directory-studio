@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<contexts>
+ 	<context id="tools_newconnection_wizard">
+   		<description>This wizard helps you to create a new connection to a LDAP directory.</description>
+   		<topic label="New LDAP Connection wizard" href="html/tools_newconnection_wizard.html"/>
+   		<topic label="Network Parameter" href="html/tools_newconnection_wizard.html#tools_newconnection_wizard_1"/>
+   		<topic label="Authentication" href="html/tools_newconnection_wizard.html#tools_newconnection_wizard_2"/>
+   		<topic label="Browser Options" href="html/tools_newconnection_wizard.html#tools_newconnection_wizard_3"/>
+   		<topic label="Edit Options" href="html/tools_newconnection_wizard.html#tools_newconnection_wizard_4"/>
+   	</context>
+ 	<context id="tools_connection_properties">
+   		<description>Properties of a connection to a LDAP directory.</description>
+   		<topic label="LDAP Connection properties" href="html/tools_connection_properties.html"/>
+   		<topic label="Network Parameter" href="html/tools_connection_properties.html#tools_connection_properties_network_parameter"/>
+   		<topic label="Authentication" href="html/tools_connection_properties.html#tools_connection_properties_authentication"/>
+   		<topic label="Browser Options" href="html/tools_connection_properties.html#tools_connection_properties_browser_options"/>
+   		<topic label="Edit Options" href="html/tools_connection_properties.html#tools_connection_properties_edit_options"/>
+   	</context>
+</contexts>

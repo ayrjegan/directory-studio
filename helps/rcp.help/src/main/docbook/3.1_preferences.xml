@@ -1,0 +1,56 @@
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one
+	or more contributor license agreements.  See the NOTICE file
+	distributed with this work for additional information
+	regarding copyright ownership.  The ASF licenses this file
+	to you under the Apache License, Version 2.0 (the
+	"License"); you may not use this file except in compliance
+	with the License.  You may obtain a copy of the License at
+	
+	http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing,
+	software distributed under the License is distributed on an
+	"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	KIND, either express or implied.  See the License for the
+	specific language governing permissions and limitations
+	under the License.
+-->
+<section id="preferences">
+	<title>Preferences</title>
+	<para>
+		The
+		<emphasis role="strong">Preferences</emphasis>
+		dialog is the dialog used to set user preferences. The
+		Preferences dialog pages can be searched using the filter
+		function. To filter by matching the page title, simply type the
+		name of the page you are seeking and the available pages will be
+		presented below. The filter also searches on keywords such as
+		appearance and java. The history controls allow you to navigate
+		through previously viewed pages. To step back or forward several
+		pages at a time, click the drop down arrow and a list of the
+		most recently viewed preference pages will appear.
+	</para>
+	<para>
+		The Preferences dialog can be found from the main workbench
+		<emphasis role="strong">Window</emphasis>
+		menu under
+		<emphasis role="strong">
+			Window >
+			<imageobject>
+				<imagedata scale="50"
+					fileref="images/preferences.png" format="PNG" />
+			</imageobject>
+			Preferences
+		</emphasis>
+		. Preference pages contributed by plug-ins will be found in this
+		dialog.
+	</para>
+
+    &apache_directory_studio;
+    &general;
+    &help;
+	&install_update;
+	&installed_jres;
+
+</section>

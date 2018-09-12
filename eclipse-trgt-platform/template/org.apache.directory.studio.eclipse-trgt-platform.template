@@ -102,7 +102,7 @@
       <!-- MINA module -->
       <unit id="org.apache.mina.core" version="${org.apache.mina.bundleversion}"/>
 
-      <repository location="file:///D:/Mysore/Projects/HALTEST/temp/directory-studio-master/eclipse-trgt-platform/target/repository"/>
+      <repository location="file:///D:/dirstudio/eclipse-trgt-platform/target/repository"/>
     </location>
 
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">

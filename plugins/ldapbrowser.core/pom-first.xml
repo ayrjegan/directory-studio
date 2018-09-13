@@ -40,7 +40,8 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+  <build>
+  <plugins>
       <!-- Embedded artifacts -->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>

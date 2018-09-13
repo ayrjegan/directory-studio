@@ -94,10 +94,40 @@
         </executions>
       </plugin>
 
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-failsafe-plugin</artifactId>
+    <version>2.15</version>
+    <executions>
+        <!--
+            Ensures that both integration-test and verify goals of the Failsafe Maven
+            plugin are executed.
+        -->
+        <execution>
+            <id>integration-tests</id>
+            <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+            </goals>
+            <configuration>
+                <!-- Sets the VM argument line used when integration tests are run. -->
+                <argLine>${failsafeArgLine}</argLine>
+                <!--
+                    Skips integration tests if the value of skip.integration.tests property
+                    is true
+                -->
+                <!-- <skipTests>${skip.integration.tests}</skipTests> -->
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
+
+
       <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <!-- <version>0.7.5.201505241946</version> -->
+    <version>0.8.1</version>
     <executions>
         <!-- The Executions required by unit tests are omitted. -->
         <!--
@@ -112,7 +142,7 @@
             </goals>
             <configuration>
                 <!-- Sets the path to the file which contains the execution data. -->
-                <destFile>./coverage-reports/jacoco-it.exec</destFile>
+                <destFile>jacoco-it.exec</destFile>
                 <!--
                     Sets the name of the property containing the settings
                     for JaCoCo runtime agent.
@@ -132,9 +162,9 @@
             </goals>
             <configuration>
                 <!-- Sets the path to the file which contains the execution data. -->
-                <dataFile>./coverage-reports/jacoco-it.exec</dataFile>
+                <dataFile>jacoco-it.exec</dataFile>
                 <!-- Sets the output directory for the code coverage report. -->
-                <outputDirectory>./coverage_output_integration/jacoco-it</outputDirectory>
+                <outputDirectory>jacoco-it</outputDirectory>
             </configuration>
         </execution>
     </executions>
